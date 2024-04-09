@@ -1,5 +1,4 @@
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
@@ -39,6 +38,14 @@ public class Main {
 
         qCount = questions.size();
 
+        /**
+         * Toto funguje a je dobře nastavené
+         * Je potřeba dodělat logiku poslední části
+         * Vypisování otázek a odpovědí, počítání bodů
+         * Zachycení vyjímek v zápisu do scanneru (čísla a blbosti), možné detekci toho, že jsou to doopravdy jenom písmena v rozsahu "abcde"
+         *
+         */
+        // Je možné pustit metodu main a zkusit napsat odpovědi třeba ab, konzole vypíše počet správných odpovědí otázky q4
         StringBuilder answers = new StringBuilder();
         q4.getText();
         q4.printAllAnswers();
