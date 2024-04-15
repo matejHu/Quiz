@@ -4,60 +4,90 @@ import java.util.ArrayList;
 public class Question {
     private String text;
     private int countAnswers;
-    private ArrayList<Answer> correctAnswers;
-    private ArrayList<Answer> incorrectAnswers;
+    private ArrayList<Answer> Answers;
+
 
     public Question(String text) {
         this.text = text;
-
-        this.correctAnswers = new ArrayList<>();
-        this.incorrectAnswers = new ArrayList<>();
+        this.Answers = new ArrayList<>();
     }
 
-    public void addCorrectAnswer(char letter, String text, boolean isTrue) {
-        correctAnswers.add(new Answer(letter, text, isTrue));
+    //Přidá správnou odpověď
+    public void addAnswer(char letter, String text) {
+        Answers.add(new Answer(letter, text,true));
     }
 
-    public void addIncorrectAnswer(char letter, String text, boolean isTrue) {
-        incorrectAnswers.add(new Answer(letter, text, isTrue));
+    //Přidá špatnou odpověď
+    public void addIncorrectAnswer(char letter, String text) {
+        Answers.add(new Answer(letter, text,false));
     }
 
-    public ArrayList<Answer> getCorrectAnswers() {
-        return correctAnswers;
+    //Vrátí všechny správné odpovědi
+    public ArrayList<Answer> getAnswers() {
+        return Answers;
     }
 
+    //Vrátí všechny špatné odpovědi
     public ArrayList<Answer> getIncorrectAnswers() {
-        return incorrectAnswers;
+        return Answers;
     }
 
+    //Vrátí text otázky
     public String getText() {
         return text;
     }
 
+
+    //Vrátí počet všech odpovědí v seznamu
     public int getCountAnswers(){
-        countAnswers = correctAnswers.size() + incorrectAnswers.size();
+        countAnswers = Answers.size();
         return countAnswers;
     }
+
+    //Vrátí počet špatných odpovědí
+    public int getSizeofInCorrectAnswers(){
+        int counter = 0;
+        for (Answer answer : Answers) {
+            if(answer.isTrue() == false){
+                counter++;
+            }
+        } return counter;
+    }
+
+    //Vrátí počet správných odpovědí v seznamu
     public int getSizeofCorrectAnswers(){
-        return correctAnswers.size();
+        int counter = 0;
+        for (Answer answer : Answers) {
+            if(answer.isTrue() == true){
+                counter++;
+            }
+        } return counter;
     }
 
-
+    //Vypíše seznam otázek
     public void printAllAnswers() {
-
-        for (Answer answer : correctAnswers) {
-            System.out.println(answer.getLetter() + ")" + answer.getText());
-        }
-
-        for (Answer answer : incorrectAnswers) {
+        for (Answer answer : Answers) {
             System.out.println(answer.getLetter() + ")" + answer.getText());
         }
     }
 
+    // Vrátí zřetězené písmena správných odpovědí
     public String joinCorrectAnswerLetters() {
         StringBuilder builder = new StringBuilder();
-        for (Answer answer : correctAnswers) {
-            builder.append(answer.getLetter());
+        for (Answer answer : Answers) {
+            if (answer.isTrue() == true) {
+                builder.append(answer.getLetter());
+            }
+        }
+        return builder.toString();
+    }
+    //Vrátí zřetězené písmena špatných odpovědí
+    public String joinInCorrectAnswerLetters() {
+        StringBuilder builder = new StringBuilder();
+        for (Answer answer : Answers) {
+            if (answer.isTrue() == false) {
+                builder.append(answer.getLetter());
+            }
         }
         return builder.toString();
     }

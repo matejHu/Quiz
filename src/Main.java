@@ -1,60 +1,54 @@
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        final Scanner scanner = new Scanner(System.in);
-        HashSet<Question> questions;
-        int qCount;
-        int points = 0;
+        Quiz quiz = new Quiz();
+        HashSet<Question> questions = quiz.getQuestions();
 
-        Question q1 = new Question("How much is 2+2");
-        q1.addCorrectAnswer('a', "4", true);
-        q1.addIncorrectAnswer('b', "5", false);
-        q1.addIncorrectAnswer('c', "6", false);
-        q1.addIncorrectAnswer('d', "7", false);
+        Scanner scanner = new Scanner(System.in);
 
-        Question q2 = new Question("The correct names of the months of the year:");
-        q2.addCorrectAnswer('a', "June", true);
-        q2.addCorrectAnswer('b', "July", true);
-        q2.addCorrectAnswer('c', "February", true);
-        q2.addIncorrectAnswer('d', "Moonshine", false);
+        Iterator<Question> iterator = questions.iterator();
 
-        Question q3 = new Question("How many fingers do you have on one hand?");
-        q3.addCorrectAnswer('a', "5", true);
-        q3.addIncorrectAnswer('b', "4", false);
-        q3.addIncorrectAnswer('c', "6", false);
+        int questionCounter = 0;
 
-        Question q4 = new Question("What is fruit?");
-        q4.addCorrectAnswer('a', "Apple", true);
-        q4.addCorrectAnswer('b', "Banana", true);
-        q4.addCorrectAnswer('c', "Tomato", true);
+        while (iterator.hasNext()) {
+            Question question = iterator.next();
+            System.out.println("Question: " + question.getText());
+            System.out.println("Answers:");
+            for (Answer answer : question.getAnswers()) {
+                System.out.println(answer.getLetter() + ") " + answer.getText());
+            }
+            System.out.print("Your answer (enter the letter): ");
+            String userAnswer = scanner.nextLine();
 
-        questions = new HashSet<>();
-        questions.add(q1);
-        questions.add(q2);
-        questions.add(q3);
-        questions.add(q4);
+            // Check if the user's answer is correct
+            if (userAnswer.equals(question.joinCorrectAnswerLetters())) {
+                questionCounter++;
+                System.out.println("Correct!");
+                System.out.println("Counter of right answers: " + countCommonCharacters(question.joinCorrectAnswerLetters(), userAnswer) + "/" + question.getSizeofCorrectAnswers());
+                System.out.println("Correct questions total: " + questionCounter);
+            } else {
+                System.out.println("Incorrect!");
+                System.out.println("Counter of right answers: " + countCommonCharacters(question.joinCorrectAnswerLetters(), userAnswer) + "/" + question.getSizeofCorrectAnswers());
+            }
 
-        qCount = questions.size();
+            // Check if there are more questions
+            if (iterator.hasNext()) {
+                System.out.println("Press Enter to continue to the next question...");
+                scanner.nextLine(); // Wait for user to press Enter
+            } else {
+                System.out.println("End of quiz.");
+                System.out.println("You were correct in " + questionCounter + "/" + questions.size() + " of total number of questions");
+            }
+        }
 
-        /**
-         * Toto funguje a je dobře nastavené
-         * Je potřeba dodělat logiku poslední části
-         * Vypisování otázek a odpovědí, počítání bodů
-         * Zachycení vyjímek v zápisu do scanneru (čísla a blbosti), možné detekci toho, že jsou to doopravdy jenom písmena v rozsahu "abcde"
-         *
-         */
-        // Je možné pustit metodu main a zkusit napsat odpovědi třeba ab, konzole vypíše počet správných odpovědí otázky q4
-        StringBuilder answers = new StringBuilder();
-        q4.getText();
-        q4.printAllAnswers();
-        System.out.print("Odpověď: ");
-        String answer = scanner.nextLine();
-
-        System.out.println("Vaše odpověď je správná v tolika bodech: "+countCommonCharacters(answer, q4.joinCorrectAnswerLetters()) + " z " + q4.getSizeofCorrectAnswers());
-
+        scanner.close();
     }
+
+
+
     public static int countCommonCharacters(String str1, String str2) {
         int count = 0;
         for (int i = 0; i < str1.length(); i++) {
